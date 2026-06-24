@@ -1,0 +1,5 @@
+SELECT DISTINCT fp.* 
+FROM facebook_posts fp 
+JOIN facebook_reactions fr
+ON fp.post_id = fr.post_id
+WHERE reaction = 'heart';
