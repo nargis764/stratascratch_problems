@@ -1,0 +1,1 @@
+This repository contains solutions to the problems I solved from the StrataScratch platform. All the problems are available here: [StrataScratch Problems](https://platform.stratascratch.com/coding?code_type=1).
