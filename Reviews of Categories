@@ -1,0 +1,5 @@
+SELECT category, SUM(review_count) AS review_cnt
+FROM yelp_business yb
+CROSS JOIN LATERAL unnest(string_to_array(yb.categories, ';')) AS category
+GROUP BY category
+ORDER BY review_cnt DESC;
