@@ -1,0 +1,6 @@
+SELECT DISTINCT worker_title FROM (select title.worker_title
+from worker
+RIGHT JOIN title ON worker.worker_id = title.worker_ref_id
+ORDER BY salary DESC
+LIMIT 2)
+ORDER BY worker_title
