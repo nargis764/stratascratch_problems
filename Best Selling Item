@@ -1,0 +1,20 @@
+WITH CTE1 AS (
+select invoiceno,
+date_part('month', invoicedate) as month,
+description,
+SUM(unitprice * quantity) OVER(PARTITION BY date_part('month', invoicedate), description) AS total_paid
+from online_retail
+WHERE quantity >= 0),
+CTE2 AS (
+SELECT *,
+ROW_NUMBER() OVER(PARTITION BY month ORDER BY total_paid DESC) AS total_rank
+FROM CTE1
+ORDER BY month, total_rank)
+SELECT month,
+description,
+total_paid
+FROM CTE2
+WHERE total_rank = 1
+
+
+
