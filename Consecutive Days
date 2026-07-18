@@ -1,15 +1,10 @@
-WITH cte1 AS(
-select record_date as ct_date, user_id,
-ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY record_date) AS row_num,
-LAG(record_date) OVER(PARTiTION BY user_id ORDER BY record_date) as prev_date,
-LEAD(record_date) OVER(PARTiTION BY user_id ORDER BY record_date) as next_date
-from sf_events
-),
-cte2 as (
-select user_id, prev_date, ct_date, next_date,
-(ct_date - prev_date) AS days_diff_previous,
-(next_date - ct_date) AS days_diff_forward
-from cte1
+WITH cte AS (
+SELECT user_id,
+record_date AS ct_date, 
+LAG(record_date) OVER(PARTITION BY user_id ORDER BY record_date) as prev_date,
+LEAD(record_date) OVER(PARTITION BY user_id ORDER BY record_date) as next_date
+FROM sf_events
 )
-select DISTINCT user_id from cte2
-WHERE days_diff_previous=1 and days_diff_forward=1;
+SELECT DISTINCT user_id
+FROM cte
+WHERE ct_date - prev_date = 1 and next_date - ct_date = 1;
