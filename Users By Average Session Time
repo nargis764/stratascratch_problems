@@ -1,0 +1,15 @@
+WITH cte1 AS (
+select CAST(timestamp AS DATE) AS date_only,* from facebook_web_log
+),
+cte2 AS (
+SELECT user_id,
+MAX(timestamp) FILTER (WHERE action = 'page_load') AS max_page_load,
+MIN(timestamp) FILTER (WHERE action = 'page_exit') AS min_page_exit
+FROM cte1
+GROUP BY user_id, date_only
+)
+SELECT user_id,
+AVG(min_page_exit - max_page_load) AS avg_session_duration
+FROM cte2
+WHERE min_page_exit > max_page_load
+GROUP BY user_id
