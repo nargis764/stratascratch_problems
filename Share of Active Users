@@ -1,0 +1,2 @@
+SELECT 100.0 * (CAST(COUNT(CASE WHEN status='open' AND country='USA' THEN 1 END) AS NUMERIC)/COUNT(*)) AS us_active_share
+FROM fb_active_users;
